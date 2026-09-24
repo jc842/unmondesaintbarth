@@ -1,0 +1,122 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+const featuredPosts = sortedPosts.slice(0, 6);
+const remainingPosts = sortedPosts.slice(6, 40);
+---
+
+<Layout title="Un Monde Saint-Barth — Art de Vivre, Villas & Villégiature d'Exception à Saint-Barthélemy">
+  <!-- Hero Section Profoliox -->
+  <section class="relative border-b border-stone-200/80 bg-[#faf8f5] py-16 sm:py-24 overflow-hidden">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      
+      <!-- Top Pill -->
+      <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-800/20 bg-amber-100/50 px-3.5 py-1 text-xs text-amber-900 font-medium">
+        <span class="h-2 w-2 rounded-full bg-amber-700"></span>
+        REVUE ÉDITORIALE SAINT-BARTHÉLEMY
+      </div>
+
+      <!-- Headline -->
+      <h1 class="font-serif-luxury text-3xl font-normal tracking-tight text-stone-900 sm:text-5xl lg:text-6xl max-w-4xl leading-tight">
+        L'Art de Vivre et la Sérénité d'une <span class="italic text-amber-900">Île d'Exception</span>.
+      </h1>
+
+      <p class="mt-6 max-w-2xl text-base sm:text-lg text-stone-600 leading-relaxed font-light">
+        De Gustavia aux falaises préservées de Colombier, carnet d'adresses d'exception, villas confidentielles et art de la villégiature sous le soleil des Caraïbes.
+      </p>
+
+      <!-- Key Pillars Row -->
+      <div class="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+        <div class="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+          <div class="text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Refuges Confidentiels</div>
+          <div class="mt-2 font-serif-luxury text-2xl font-bold text-stone-900">Villas d'Art</div>
+          <div class="mt-1 text-xs text-stone-500">Piscines miroirs & panoramas</div>
+        </div>
+        <div class="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+          <div class="text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Haute Gastronomie</div>
+          <div class="mt-2 font-serif-luxury text-2xl font-bold text-amber-900">Chefs Étoilés</div>
+          <div class="mt-1 text-xs text-stone-500">Savoir-faire et terroir marin</div>
+        </div>
+        <div class="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+          <div class="text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Nature Préservée</div>
+          <div class="mt-2 font-serif-luxury text-2xl font-bold text-stone-900">14 Plages</div>
+          <div class="mt-1 text-xs text-stone-500">Saline, Gouverneur, Colombier</div>
+        </div>
+        <div class="rounded-sm border border-stone-200 bg-white p-6 shadow-sm">
+          <div class="text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Bucket Regatta</div>
+          <div class="mt-2 font-serif-luxury text-2xl font-bold text-stone-900">Élégance</div>
+          <div class="mt-1 text-xs text-stone-500">Tradition nautique mondiale</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Bento Articles -->
+  <section class="py-16 sm:py-20 bg-white border-b border-stone-200">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-800 font-semibold">Chroniques Insulaires</span>
+          <h2 class="font-serif-luxury text-2xl font-bold text-stone-900 sm:text-3xl mt-1">Dernières Écritures & Carnets</h2>
+        </div>
+        <a href="/blog/" class="hidden sm:inline-flex items-center gap-2 text-xs text-amber-800 hover:text-amber-900 font-semibold tracking-wider uppercase">
+          TOUTES LES PUBLICATIONS →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {featuredPosts.map((post) => (
+          <article class="group relative flex flex-col justify-between rounded-sm border border-stone-200 bg-[#faf8f5] p-7 transition-all duration-300 hover:border-amber-800/40 hover:shadow-md">
+            <div>
+              <div class="flex items-center justify-between text-[11px] text-stone-500 mb-4">
+                <span class="rounded bg-amber-100/70 px-2 py-0.5 text-amber-900 font-semibold text-[10px] uppercase tracking-wider">{post.data.category || 'Chronique'}</span>
+                <span>{new Date(post.data.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              </div>
+              <h3 class="font-serif-luxury text-xl font-bold text-stone-900 group-hover:text-amber-800 transition-colors line-clamp-2 leading-snug">
+                <a href={'/blog/' + post.id + '/'}>
+                  {post.data.title}
+                </a>
+              </h3>
+              <p class="mt-3 text-xs text-stone-600 line-clamp-3 leading-relaxed font-light">
+                {post.data.description}
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-stone-200/80 flex items-center justify-between text-xs">
+              <span class="text-stone-400 font-serif-luxury italic">Revue Saint-Barth</span>
+              <a href={'/blog/' + post.id + '/'} class="text-amber-800 hover:underline font-semibold text-[11px] tracking-wider uppercase">
+                Découvrir →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Extended Library -->
+  <section class="py-16 bg-[#f4f1ea]">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <h2 class="font-serif-luxury text-2xl font-bold text-stone-900 mb-8">
+        L'Archipel Saint-Barth : Art, Villégiature & Traditions
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {remainingPosts.map(post => (
+          <div class="flex items-start justify-between rounded-sm border border-stone-200/80 bg-white p-4 shadow-sm hover:border-amber-800/30 transition-colors">
+            <div class="pr-4">
+              <span class="text-[9px] text-amber-800 uppercase tracking-widest font-semibold">{post.data.category || 'Article'}</span>
+              <h4 class="font-serif-luxury text-sm font-semibold text-stone-800 mt-1 hover:text-amber-800 transition-colors">
+                <a href={'/blog/' + post.id + '/'}>{post.data.title}</a>
+              </h4>
+            </div>
+            <a href={'/blog/' + post.id + '/'} class="text-xs text-amber-800 whitespace-nowrap pt-1 font-semibold">
+              Consulter →
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

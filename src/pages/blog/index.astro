@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+---
+
+<Layout title="Toutes les Chroniques et Dossiers d'Art de Vivre — Un Monde Saint-Barth">
+  <section class="border-b border-stone-200 bg-[#faf8f5] py-14">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="inline-flex items-center gap-2 rounded-full border border-amber-800/20 bg-amber-100/50 px-3 py-1 text-xs text-amber-900 font-semibold mb-4">
+        SOMMAIRE DES PUBLICATIONS
+      </div>
+      <h1 class="font-serif-luxury text-3xl font-bold text-stone-900 sm:text-4xl">Toutes les Chroniques Saint-Barth</h1>
+      <p class="mt-3 max-w-2xl text-stone-600 text-sm">
+        Explorez nos articles de fond, sélections hôtelières, adresses confidentielles et récits d'art de vivre à Saint-Barthélemy.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 bg-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedPosts.map(post => (
+          <article class="flex flex-col justify-between rounded-sm border border-stone-200 bg-[#faf8f5] p-6 hover:border-amber-800/50 transition-colors">
+            <div>
+              <div class="flex items-center justify-between text-[11px] text-stone-500 mb-3">
+                <span class="rounded bg-amber-100 px-2 py-0.5 text-amber-900 font-semibold text-[10px] uppercase">{post.data.category || 'Article'}</span>
+                <span>{new Date(post.data.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              </div>
+              <h2 class="font-serif-luxury text-lg font-bold text-stone-900 hover:text-amber-800 transition-colors line-clamp-2">
+                <a href={'/blog/' + post.id + '/'}>{post.data.title}</a>
+              </h2>
+              <p class="mt-2 text-xs text-stone-600 line-clamp-3 leading-relaxed font-light">
+                {post.data.description}
+              </p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-stone-200 flex justify-end text-xs">
+              <a href={'/blog/' + post.id + '/'} class="text-amber-800 hover:underline font-semibold uppercase text-[11px] tracking-wider">
+                Lire l'article →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>

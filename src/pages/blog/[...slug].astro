@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title + ' — Un Monde Saint-Barth'} description={post.data.description}>
+  <article class="py-14 bg-white">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6">
+      
+      <!-- Breadcrumb -->
+      <div class="flex items-center gap-2 text-xs text-stone-500 mb-8 font-semibold">
+        <a href="/" class="hover:text-amber-800">Accueil</a>
+        <span>/</span>
+        <a href="/blog/" class="hover:text-amber-800">Chroniques</a>
+        <span>/</span>
+        <span class="text-amber-800">{post.data.category || 'Saint-Barth'}</span>
+      </div>
+
+      <!-- Header -->
+      <header class="border-b border-stone-200 pb-8 mb-8">
+        <span class="text-[11px] uppercase tracking-widest text-amber-800 font-semibold mb-3 block">ÉDITION SAINT-BARTHÉLEMY</span>
+        <h1 class="font-serif-luxury text-2xl sm:text-4xl font-bold text-stone-900 tracking-tight leading-snug">
+          {post.data.title}
+        </h1>
+        <div class="mt-4 flex items-center gap-4 text-xs text-stone-500">
+          <span>Publié le {new Date(post.data.pubDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          <span>•</span>
+          <span class="italic font-serif-luxury">Par la Rédaction Un Monde Saint-Barth</span>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="prose prose-stone max-w-none prose-headings:font-serif-luxury prose-headings:font-bold prose-headings:text-stone-900 prose-a:text-amber-800 leading-relaxed text-stone-700 font-light text-base">
+        <Content />
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-14 border-t border-stone-200 pt-8 text-xs flex justify-between items-center text-stone-500">
+        <a href="/blog/" class="text-amber-800 hover:underline font-semibold uppercase tracking-wider text-[11px]">← Retour aux chroniques</a>
+        <span class="font-serif-luxury italic">Un Monde Saint-Barth</span>
+      </footer>
+    </div>
+  </article>
+</Layout>
